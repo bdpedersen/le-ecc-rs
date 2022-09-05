@@ -3,7 +3,7 @@
 use crate::{word::*};
 
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Point {
     pub x: Word,
     pub y: Word,

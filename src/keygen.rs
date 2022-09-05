@@ -237,6 +237,36 @@ mod tests {
 
         assert_eq!(bobs_secret,alices_secret);
 
+        let mut alices_wrong_key = alices_public_key.clone();
+
+        alices_wrong_key.x[0]=0xdeadbeef;
+
+        let bobs_secret = bob.shared_secret(&alices_wrong_key,Some(&mut rng));
+
+        assert!(bobs_secret.is_err());
+
+        alices_wrong_key = alices_public_key.clone();
+        alices_wrong_key.y = Word::new();
+
+        let bobs_secret = bob.shared_secret(&alices_wrong_key,Some(&mut rng));
+
+        assert!(bobs_secret.is_err());
+
+        alices_wrong_key = alices_public_key.clone();
+        alices_wrong_key.x = Word::new();
+
+        let bobs_secret = bob.shared_secret(&alices_wrong_key,Some(&mut rng));
+
+        assert!(bobs_secret.is_err());
+
+        alices_wrong_key = Point::new();
+
+        let bobs_secret = bob.shared_secret(&alices_wrong_key,Some(&mut rng));
+
+        assert!(bobs_secret.is_err());
+
+
+
         Ok(())
     }
 }
