@@ -1,3 +1,6 @@
+// Copyright 2022, Brian Dam Pedersen.
+// Licensed under the BSD 2-clause license. 
+
 #[cfg(test)]
 pub mod le_testdata {
     use crate::word::*;

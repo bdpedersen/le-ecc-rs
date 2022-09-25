@@ -1,3 +1,6 @@
+// Copyright 2022, Brian Dam Pedersen.
+// Copyright 2014, Kenneth MacKay
+// Licensed under the BSD 2-clause license. 
 
 
 use crate::{word::*};

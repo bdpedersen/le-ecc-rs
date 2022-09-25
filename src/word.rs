@@ -1,4 +1,7 @@
-//pub mod word {
+// Copyright 2022, Brian Dam Pedersen.
+// Copyright 2014, Kenneth MacKay
+// Licensed under the BSD 2-clause license. 
+
 use core::slice::{IterMut};
 use core::assert;
 
@@ -352,4 +355,4 @@ impl DWordMath for DWord {
 
 
 }
-//}
+
