@@ -167,7 +167,7 @@ impl private::KeySetAccessors for KeySetP256 {
 
 
 #[cfg(test)]
-extern crate krang;
+extern crate krang_rs;
 
 // Tests
 #[cfg(test)]
@@ -176,12 +176,12 @@ mod tests {
 
 
     struct MyRng {
-        rng: krang::Krang,
+        rng: krang_rs::Krang,
     }
 
     impl MyRng {
         fn new() -> MyRng {
-            MyRng {rng: krang::Krang::new() }
+            MyRng {rng: krang_rs::Krang::new() }
         }
     }
 
