@@ -152,7 +152,7 @@ pub trait Curve : CurveBase {
         let mut point2 = iter.next().unwrap();
 
         if nb == 1 {
-            std::mem::swap(&mut point1, &mut point2);
+            core::mem::swap(&mut point1, &mut point2);
         }
 
         let (x1,y1) = (&mut point1.x, &mut point1.y);
@@ -182,10 +182,10 @@ pub trait Curve : CurveBase {
         let mut point2 = iter.next().unwrap();
 
         if nb == 0 {
-            std::mem::swap(&mut point1,&mut point2);
+            core::mem::swap(&mut point1,&mut point2);
         }
 
-
+    
         let (x1,y1) = (&mut point1.x, &mut point1.y);
         let (x2,y2) = (&mut point2.x, &mut point2.y);
 

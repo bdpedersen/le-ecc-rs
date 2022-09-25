@@ -1,4 +1,4 @@
-use std::fmt;
+use core::fmt;
 
 #[derive(Debug)]
 pub enum KeygenError {
@@ -8,8 +8,6 @@ pub enum KeygenError {
     KeyNotOnCurve,
     NoPrivateKeyAvailable,
 }
-
-impl std::error::Error for KeygenError {}
 
 impl fmt::Display for KeygenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
