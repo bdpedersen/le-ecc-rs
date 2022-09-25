@@ -1,9 +1,9 @@
 [package]
-name = "micro-ecc"
+name = "le-ecc-rs"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-krang = { path = "../krang"}
+krang-rs = { git = "https://github.com/bdpedersen/krang-rs.git"}
