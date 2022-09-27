@@ -2,6 +2,7 @@
 // Copyright 2014, Kenneth MacKay
 // Licensed under the BSD 2-clause license. 
 
+
 use crate::word::*;
 use crate::point::*;
 use crate::errors::*;
@@ -151,18 +152,16 @@ pub trait Curve : CurveBase {
     }
 
     fn xycz_add(&self, points: &mut [Point; 2], nb: usize) {
-        let mut iter = points.iter_mut();
 
         // Necessary gymnastics to do branch-less swap of data
-        let mut point_arr =  unsafe { core::mem::MaybeUninit::<[*mut Point; 2]>::uninit().assume_init() };
-        point_arr[0] = iter.next().unwrap();
-        point_arr[1] = iter.next().unwrap();
-        let point1 = point_arr[nb];
-        let point2 = point_arr[1-nb];
-    
+        let point_arr = [&mut points[0] as *mut Point, &mut points[1] as *mut Point]; 
+        
         // Unsafe as pointers may not have been initialized - but they are provably initialized above
-        let (x1,y1) = unsafe { (&mut (*point1).x, &mut (*point1).y) };
-        let (x2,y2) = unsafe { (&mut (*point2).x, &mut (*point2).y) };
+        let point1 = unsafe { point_arr[nb].as_mut().unwrap_unchecked() };
+        let point2 = unsafe { point_arr[1-nb].as_mut().unwrap_unchecked() };
+    
+        let (x1,y1) = (&mut point1.x, &mut point1.y);
+        let (x2,y2) = (&mut point2.x, &mut point2.y);
 
 
         let mut t5 = self.mod_sub(x2,x1);  /* t5 = x2 - x1 */
@@ -185,16 +184,16 @@ pub trait Curve : CurveBase {
 
 
     fn xycz_addc(&self, points: &mut [Point; 2], nb: usize) {
-        let mut iter = points.iter_mut();
-        let mut point_arr =  unsafe { core::mem::MaybeUninit::<[*mut Point; 2]>::uninit().assume_init() };
-        point_arr[0] = iter.next().unwrap();
-        point_arr[1] = iter.next().unwrap();
-        let point1 = point_arr[1-nb];
-        let point2 = point_arr[nb];
+        // Necessary gymnastics to do branch-less swap of data
+        let point_arr = [&mut points[0] as *mut Point, &mut points[1] as *mut Point]; 
+        
+        // Unsafe as pointers may not have been initialized - but they are provably initialized above
+        let point1 = unsafe { point_arr[1-nb].as_mut().unwrap_unchecked() };
+        let point2 = unsafe { point_arr[nb].as_mut().unwrap_unchecked() };
     
-        let (x1,y1) = unsafe { (&mut (*point1).x, &mut (*point1).y) };
-        let (x2,y2) = unsafe { (&mut (*point2).x, &mut (*point2).y) };
-
+        let (x1,y1) = (&mut point1.x, &mut point1.y);
+        let (x2,y2) = (&mut point2.x, &mut point2.y);
+    
         let mut t5 = self.mod_sub(x2,x1); /* t5 = x2 - x1 */
         t5 = self.mod_square(&t5);    /* t5 = (x2 - x1)^2 = A */
         *x1 = self.mod_mult(x1, &t5);     /* t1 = x1*A = B */
