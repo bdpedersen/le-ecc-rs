@@ -152,15 +152,18 @@ pub trait Curve : CurveBase {
 
     fn xycz_add(&self, points: &mut [Point; 2], nb: usize) {
         let mut iter = points.iter_mut();
-        let mut point1 = iter.next().unwrap();
-        let mut point2 = iter.next().unwrap();
 
-        if nb == 1 {
-            core::mem::swap(&mut point1, &mut point2);
-        }
+        // Necessary gymnastics to do branch-less swap of data
+        let mut point_arr =  unsafe { core::mem::MaybeUninit::<[*mut Point; 2]>::uninit().assume_init() };
+        point_arr[0] = iter.next().unwrap();
+        point_arr[1] = iter.next().unwrap();
+        let point1 = point_arr[nb];
+        let point2 = point_arr[1-nb];
+    
+        // Unsafe as pointers may not have been initialized - but they are provably initialized above
+        let (x1,y1) = unsafe { (&mut (*point1).x, &mut (*point1).y) };
+        let (x2,y2) = unsafe { (&mut (*point2).x, &mut (*point2).y) };
 
-        let (x1,y1) = (&mut point1.x, &mut point1.y);
-        let (x2,y2) = (&mut point2.x, &mut point2.y);
 
         let mut t5 = self.mod_sub(x2,x1);  /* t5 = x2 - x1 */
         t5 = self.mod_square(&t5);  /* t5 = (x2 - x1)^2 = A */
@@ -180,18 +183,17 @@ pub trait Curve : CurveBase {
         *x2 = t5;
     }
 
+
     fn xycz_addc(&self, points: &mut [Point; 2], nb: usize) {
         let mut iter = points.iter_mut();
-        let mut point1 = iter.next().unwrap();
-        let mut point2 = iter.next().unwrap();
-
-        if nb == 0 {
-            core::mem::swap(&mut point1,&mut point2);
-        }
-
+        let mut point_arr =  unsafe { core::mem::MaybeUninit::<[*mut Point; 2]>::uninit().assume_init() };
+        point_arr[0] = iter.next().unwrap();
+        point_arr[1] = iter.next().unwrap();
+        let point1 = point_arr[1-nb];
+        let point2 = point_arr[nb];
     
-        let (x1,y1) = (&mut point1.x, &mut point1.y);
-        let (x2,y2) = (&mut point2.x, &mut point2.y);
+        let (x1,y1) = unsafe { (&mut (*point1).x, &mut (*point1).y) };
+        let (x2,y2) = unsafe { (&mut (*point2).x, &mut (*point2).y) };
 
         let mut t5 = self.mod_sub(x2,x1); /* t5 = x2 - x1 */
         t5 = self.mod_square(&t5);    /* t5 = (x2 - x1)^2 = A */

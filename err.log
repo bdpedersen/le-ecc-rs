@@ -1,0 +1,15 @@
+   Compiling micro-ecc v0.1.0 (/Users/brian/Documents/src/rust/micro-ecc)
+error[E0433]: failed to resolve: use of undeclared crate or module `std`
+   --> src/ecc_curve.rs:155:13
+    |
+155 |             std::mem::swap(&mut point1, &mut point2);
+    |             ^^^ use of undeclared crate or module `std`
+
+error[E0433]: failed to resolve: use of undeclared crate or module `std`
+   --> src/ecc_curve.rs:185:13
+    |
+185 |             std::mem::swap(&mut point1,&mut point2);
+    |             ^^^ use of undeclared crate or module `std`
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `micro-ecc` due to 2 previous errors
